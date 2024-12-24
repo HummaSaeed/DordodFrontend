@@ -1,0 +1,103 @@
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  background: #fff;
+  border-right: 1px solid #eee;
+  transition: width 0.3s;
+  width: 250px;
+}
+
+.sidebar.collapsed {
+  width: 70px;
+}
+
+.sidebar-header {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  color: #6c757d;
+  text-decoration: none;
+}
+
+.sidebar-link:hover {
+  background: #f8f9fa;
+}
+
+.sidebar-link.active {
+  background: #e9ecef;
+  color: #2C3E50;
+}
+
+.sidebar-icon {
+  font-size: 1.25rem;
+  margin-right: 1rem;
+}
+
+.main-content {
+  flex: 1;
+  background: #f8f9fa;
+}
+
+.top-navbar {
+  border-bottom: 1px solid #eee;
+  padding: 0.5rem 1rem;
+}
+
+.page-content {
+  padding: 2rem;
+}
+
+.stat-card {
+  transition: transform 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.activity-timeline {
+  position: relative;
+}
+
+.activity-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 1rem 0;
+  border-left: 2px solid #eee;
+  margin-left: 1.5rem;
+}
+
+.activity-icon {
+  width: 32px;
+  height: 32px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: -17px;
+  border: 2px solid #eee;
+}
+
+.activity-content {
+  margin-left: 1rem;
+} 
