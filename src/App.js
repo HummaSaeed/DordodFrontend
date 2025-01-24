@@ -36,7 +36,7 @@ const PrivateRoute = ({ children }) => {
 function App() {
   return (
     <ErrorBoundary>
-      <BrowserRouter>
+      <BrowserRouter basename="/">
         <AuthProvider>
           <Routes>
             <Route path="/" element={<Layout />}>

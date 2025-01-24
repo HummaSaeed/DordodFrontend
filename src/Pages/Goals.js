@@ -8,6 +8,7 @@ import InputField from "../components/InputField";
 import { Toast } from '../components/Toast';
 import { handleApiError } from '../utils/apiErrorHandler';
 import { theme } from '../theme';
+import { API_BASE_URL } from '../config/api';
 
 const localizer = momentLocalizer(moment);
 
@@ -53,7 +54,7 @@ const Goals = () => {
 
   const fetchGoals = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/main-goals/", {
+      const response = await axios.get(`${API_BASE_URL}/main-goals/`, {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` }
       });
 
@@ -109,7 +110,7 @@ const Goals = () => {
 
   const handleSaveGoal = async () => {
     try {
-      const response = await axios.post("http://dordod.com/api/main-goals/", newGoal, {
+      const response = await axios.post(`${API_BASE_URL}/main-goals/`, newGoal, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
           'Content-Type': 'application/json'
@@ -157,7 +158,7 @@ const Goals = () => {
 
   const handleDeleteGoal = async () => {
     try {
-      await axios.delete(`http://dordod.com/api/main-goals/${selectedGoal.id}/`, {
+      await axios.delete(`${API_BASE_URL}/main-goals/${selectedGoal.id}/`, {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` }
       });
 

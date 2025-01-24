@@ -3,6 +3,7 @@ import { Container, Row, Col, Card, Button, Form, Badge } from 'react-bootstrap'
 import { FaFile, FaDownload, FaTrash } from 'react-icons/fa';
 import axios from 'axios';
 import { theme } from '../theme';
+import { API_BASE_URL } from '../config/api';
 
 const Documents = () => {
   const [documents, setDocuments] = useState([]);
@@ -16,7 +17,7 @@ const Documents = () => {
 
   const fetchDocuments = async () => {
     try {
-      const response = await axios.get('http://dordod.com/api/documents/', {
+      const response = await axios.get(`${API_BASE_URL}/documents/`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
         }
@@ -41,7 +42,7 @@ const Documents = () => {
 
     setLoading(true);
     try {
-      await axios.post('http://dordod.com/api/documents/', formData, {
+      await axios.post(`${API_BASE_URL}/documents/`, formData, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
           'Content-Type': 'multipart/form-data'
@@ -61,7 +62,7 @@ const Documents = () => {
     if (!window.confirm('Are you sure you want to delete this document?')) return;
 
     try {
-      await axios.delete(`http://dordod.com/api/documents/${documentId}/`, {
+      await axios.delete(`${API_BASE_URL}/documents/${documentId}/`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
         }

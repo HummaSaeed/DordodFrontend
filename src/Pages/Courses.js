@@ -5,6 +5,7 @@ import axios from 'axios';
 import { theme } from '../theme';
 import { Toast } from '../components/Toast';
 import { handleApiError } from '../utils/apiErrorHandler';
+import { API_BASE_URL } from '../config/api';
 
 const Courses = () => {
   const [courses, setCourses] = useState([]);
@@ -19,7 +20,7 @@ const Courses = () => {
 
   const fetchCourses = async () => {
     try {
-      const response = await axios.get('http://dordod.com/api/courses/', {
+      const response = await axios.get(`${API_BASE_URL}/courses/`, {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` }
       });
       setCourses(response.data);

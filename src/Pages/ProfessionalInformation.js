@@ -5,6 +5,7 @@ import { theme } from '../theme';
 import InputField from '../components/InputField';
 import { Toast } from '../components/Toast';
 import { handleApiError } from '../utils/apiErrorHandler';
+import { API_BASE_URL } from '../config/api';
 
 const ProfessionalInformation = () => {
   const [sections, setSections] = useState({
@@ -42,7 +43,7 @@ const ProfessionalInformation = () => {
       };
 
       const fetchPromises = Object.entries(endpoints).map(([key, endpoint]) => 
-        axios.get(`http://127.0.0.1:8000/api/${endpoint}/`, {
+        axios.get(`${API_BASE_URL}/${endpoint}/`, {
           headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` }
         })
         .then(response => ({ key, data: response.data }))
@@ -72,7 +73,7 @@ const ProfessionalInformation = () => {
     const endpoint = getApiEndpoint(section);
 
     try {
-      const response = await axios.post(`http://127.0.0.1:8000/api/${endpoint}/`, newItem, {
+      const response = await axios.post(`${API_BASE_URL}/${endpoint}/`, newItem, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
           'Content-Type': 'application/json'
@@ -103,7 +104,7 @@ const ProfessionalInformation = () => {
     const endpoint = getApiEndpoint(section);
 
     try {
-      await axios.delete(`http://dordod.com/api/${endpoint}/${itemId}/`, {
+      await axios.delete(`${API_BASE_URL}/${endpoint}/${itemId}/`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
         }
@@ -135,7 +136,7 @@ const ProfessionalInformation = () => {
 
     try {
       const response = await axios.put(
-        `http://dordod.com/api/${endpoint}/${item.id}/`,
+        `${API_BASE_URL}/${endpoint}/${item.id}/`,
         updatedItem,
         {
           headers: {
@@ -246,7 +247,7 @@ const ProfessionalInformation = () => {
   const handleSaveNewItem = async (section) => {
     const endpoint = getApiEndpoint(section);
     try {
-      const response = await axios.post(`http://dordod.com/api/${endpoint}/`, newItem, {
+      const response = await axios.post(`${API_BASE_URL}/${endpoint}/`, newItem, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
           'Content-Type': 'application/json'

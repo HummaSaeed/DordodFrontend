@@ -7,6 +7,7 @@ import { theme } from '../theme';
 import { Toast } from '../components/Toast';
 import { handleApiError } from '../utils/apiErrorHandler';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { API_BASE_URL } from '../config/api';
 
 const localizer = momentLocalizer(moment);
 
@@ -22,12 +23,12 @@ const Dashboard = () => {
   const fetchDashboardData = async () => {
     try {
       // Fetch goals
-      const goalsResponse = await axios.get('http://dordod.com/api/main-goals/', {
+      const goalsResponse = await axios.get(`${API_BASE_URL}/main-goals/`, {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` }
       });
 
       // Fetch habits
-      const habitsResponse = await axios.get('http://dordod.com/api/habits/', {
+      const habitsResponse = await axios.get(`${API_BASE_URL}/habits/`, {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` }
       });
 

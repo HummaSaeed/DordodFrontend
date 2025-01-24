@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
         
         // Try to fetch personal info, but don't block authentication if it fails
         try {
-          const personalInfoResponse = await axios.get(`${API_BASE_URL}/personal-info/`, {
+          const personalInfoResponse = await axios.get(`http://dordod.com/api/personal-info/`, {
             headers: {
               'Authorization': `Bearer ${token}`
             }
@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/login/`, {
+      const response = await axios.post(`http://dordod.com/api/login/`, {
         email,
         password
       });
@@ -71,7 +71,7 @@ export const AuthProvider = ({ children }) => {
         
         // Try to fetch personal info in the background
         try {
-          const personalInfoResponse = await axios.get(`${API_BASE_URL}/personal-info/`, {
+          const personalInfoResponse = await axios.get(`http://dordod.com/api/personal-info/`, {
             headers: {
               'Authorization': `Bearer ${response.data.access}`
             }
@@ -112,7 +112,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/auth/refresh/`, {
+      const response = await axios.post(`http://dordod.com/api/auth/refresh/`, {
         refresh
       });
       localStorage.setItem('accessToken', response.data.access);
