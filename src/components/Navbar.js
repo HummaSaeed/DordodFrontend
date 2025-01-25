@@ -12,7 +12,7 @@ const CustomNavbar = ({ toggleSidebar, userName }) => {
     // Clear local storage/session
     localStorage.removeItem('token');
     // Redirect to login
-    navigate('/login');
+    navigate('/');
   };
 
   return (
