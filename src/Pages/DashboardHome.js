@@ -23,7 +23,7 @@ const DashboardHome = () => {
 
   const fetchDashboardData = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/dashboard/stats/`, {
+      const response = await axios.get(`http://dordod.com/api/dashboard/stats/`, {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` }
       });
       setStats(response.data.stats);

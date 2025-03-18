@@ -23,7 +23,7 @@ const Dashboard = () => {
   const fetchDashboardData = async () => {
     try {
       // Fetch goals
-      const goalsResponse = await axios.get(`${API_BASE_URL}/main-goals/`, {
+      const goalsResponse = await axios.get(`http://dordod.com/api/main-goals/`, {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` }
       });
 

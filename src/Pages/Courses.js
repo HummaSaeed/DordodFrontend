@@ -20,7 +20,7 @@ const Courses = () => {
 
   const fetchCourses = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/courses/`, {
+      const response = await axios.get(`http://dordod.com/api/courses/`, {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` }
       });
       setCourses(response.data);

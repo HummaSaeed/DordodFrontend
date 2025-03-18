@@ -11,11 +11,11 @@ const GlobalInformation = () => {
   const [formData, setFormData] = useState({
     nationality: '',
     current_location: '',
-    languages: '',
+    languages: [],
     time_zone: '',
     availability: '',
     preferred_communication: '',
-    social_media_links: '',
+    social_media_links: {},
     hobbies_interests: '',
     volunteer_work: '',
     travel_experience: '',
@@ -23,7 +23,7 @@ const GlobalInformation = () => {
     dietary_preferences: ''
   });
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState({ show: false, message: '', variant: 'success' });
 
   useEffect(() => {
@@ -37,10 +37,14 @@ const GlobalInformation = () => {
       });
       
       if (response.data) {
-        setFormData(response.data);
+        setFormData({
+          ...response.data,
+          languages: response.data.languages || [],
+          social_media_links: response.data.social_media_links || {}
+        });
       }
     } catch (error) {
-      if (error.response?.status !== 404) { // Ignore 404 errors
+      if (error.response?.status !== 404) {
         setToast({
           show: true,
           message: handleApiError(error),
@@ -60,6 +64,26 @@ const GlobalInformation = () => {
     }));
   };
 
+  const handleLanguageChange = (e) => {
+    const languages = e.target.value ? 
+      e.target.value.split(',').map(lang => lang.trim()).filter(Boolean) : 
+      [];
+    setFormData(prev => ({
+      ...prev,
+      languages
+    }));
+  };
+
+  const handleSocialMediaChange = (platform, value) => {
+    setFormData(prev => ({
+      ...prev,
+      social_media_links: {
+        ...prev.social_media_links,
+        [platform]: value
+      }
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -67,8 +91,8 @@ const GlobalInformation = () => {
     try {
       const method = formData.id ? 'put' : 'post';
       const url = formData.id 
-        ? `${API_BASE_URL}/global-info/${formData.id}/`
-        : `${API_BASE_URL}/global-info/`;
+        ? `http://dordod.com/api/global-info/${formData.id}/`
+        : `http://dordod.com/api/global-info/`;
 
       const response = await axios[method](url, formData, {
         headers: {
@@ -142,8 +166,8 @@ const GlobalInformation = () => {
                 <InputField
                   label="Languages"
                   name="languages"
-                  value={formData.languages}
-                  onChange={handleChange}
+                  value={(formData.languages || []).join(', ')}
+                  onChange={handleLanguageChange}
                   placeholder="e.g., English, Spanish, French"
                 />
               </Col>
@@ -182,7 +206,7 @@ const GlobalInformation = () => {
               label="Social Media Links"
               name="social_media_links"
               value={formData.social_media_links}
-              onChange={handleChange}
+              onChange={handleSocialMediaChange}
               as="textarea"
               rows={2}
               placeholder="LinkedIn, Twitter, etc."

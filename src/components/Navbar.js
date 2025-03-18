@@ -27,7 +27,7 @@ const CustomNavbar = ({ toggleSidebar, userName }) => {
       }}
     >
       <Navbar.Brand onClick={toggleSidebar} style={{ cursor: "pointer" }}>
-        <Image src={logo} height={50} alt="Logo" />
+        <Image src={logo} height={70} alt="Logo" />
       </Navbar.Brand>
       <Nav className="ms-auto d-flex align-items-center">
         <span className="me-3 fw-bold" style={{ color: theme.colors.primary }}>

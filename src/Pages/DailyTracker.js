@@ -51,7 +51,7 @@ const DailyTracker = () => {
 
   const fetchHabits = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/habits/`, {
+      const response = await axios.get(`http://dordod.com/api/habits/`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
         }

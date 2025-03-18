@@ -24,6 +24,7 @@ const PersonalInformation = () => {
   });
 
   const [profilePicturePreview, setProfilePicturePreview] = useState(null);
+  const [existingProfilePicture, setExistingProfilePicture] = useState(null);
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
@@ -34,10 +35,12 @@ const PersonalInformation = () => {
     const { name, value, type, files } = e.target;
     if (type === "file") {
       const file = files[0];
-      setFormData({ ...formData, profile_picture: file });
-      setProfilePicturePreview(URL.createObjectURL(file)); // Set preview
+      if (file) {
+        setFormData(prev => ({ ...prev, profile_picture: file }));
+        setProfilePicturePreview(URL.createObjectURL(file));
+      }
     } else {
-      setFormData({ ...formData, [name]: value });
+      setFormData(prev => ({ ...prev, [name]: value }));
     }
   };
 
@@ -93,7 +96,7 @@ const PersonalInformation = () => {
     setLoading(true);
     const token = localStorage.getItem("accessToken");
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/personal-info/", {
+      const response = await fetch("http://dordod.com/api/personal-info/", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -103,7 +106,6 @@ const PersonalInformation = () => {
       if (response.ok) {
         const data = await response.json();
         if (data.first_name) {
-          console.log(data.first_name);
           setFormData({
             first_name: data.first_name,
             middle_name: data.middle_name,
@@ -120,14 +122,16 @@ const PersonalInformation = () => {
             country: data.country,
             state: data.state,
             city: data.city,
-            profile_picture: data.profile_picture || null, // For profile picture
+            profile_picture: null,
           });
-          console.log(formData);
-        }
-        if (data.country) await fetchStates(data.country);
-        if (data.state) await fetchCities(data.country, data.state);
-        if (data.profile_picture) {
-          setProfilePicturePreview(data.profile_picture);
+          
+          if (data.profile_picture) {
+            setExistingProfilePicture(data.profile_picture);
+            setProfilePicturePreview(data.profile_picture);
+          }
+          
+          if (data.country) await fetchStates(data.country);
+          if (data.state) await fetchCities(data.country, data.state);
         }
       } else {
         setError("Failed to fetch personal information.");
@@ -143,14 +147,21 @@ const PersonalInformation = () => {
     const token = localStorage.getItem("accessToken");
 
     const formDataToSend = new FormData();
+    
     Object.keys(formData).forEach((key) => {
-      if (formData[key]) {
+      if (key !== 'profile_picture' && formData[key]) {
         formDataToSend.append(key, formData[key]);
       }
     });
 
+    if (formData.profile_picture) {
+      formDataToSend.append('profile_picture', formData.profile_picture);
+    } else if (existingProfilePicture) {
+      formDataToSend.append('existing_profile_picture', existingProfilePicture);
+    }
+
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/personal-info/", {
+      const response = await fetch("http://dordod.com/api/personal-info/", {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -230,6 +241,7 @@ const PersonalInformation = () => {
                 <img
                   src={
                     profilePicturePreview ||
+                    existingProfilePicture ||
                     "https://via.placeholder.com/150?text=Click+to+Upload"
                   }
                   alt="Profile"

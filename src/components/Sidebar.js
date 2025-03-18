@@ -45,7 +45,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       top: theme.spacing.navbar,
       left: "0",
       bottom: "0",
-      backgroundColor: theme.colors.background,
+      backgroundImage: "linear-gradient(45deg, #2C3E50, #28a745)",
       boxShadow: theme.shadows.sm,
       overflowY: "auto",
       transition: "width 0.3s ease",
@@ -63,21 +63,22 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                   display: "flex",
                   alignItems: "center",
                   cursor: "pointer",
-                  color: isActive ? theme.colors.primary : theme.colors.text.primary,
-                  backgroundColor: isActive ? `${theme.colors.primary}10` : 'transparent',
-                  borderLeft: isActive ? `4px solid ${theme.colors.primary}` : '4px solid transparent',
+                  color: "white",
+                  backgroundColor: isActive ? "rgba(255, 255, 255, 0.1)" : 'transparent',
+                  borderLeft: isActive ? "4px solid white" : '4px solid transparent',
                   transition: 'all 0.2s ease',
                 }}
               >
                 <span style={{ 
                   fontSize: '1.2rem', 
-                  color: isActive ? theme.colors.primary : theme.colors.text.secondary 
+                  color: "white"
                 }}>
                   {item.icon}
                 </span>
                 <span style={{ 
                   marginLeft: "12px",
-                  fontWeight: isActive ? '600' : '400'
+                  fontWeight: isActive ? '600' : '400',
+                  color: "white"
                 }}>
                   {item.label}
                 </span>

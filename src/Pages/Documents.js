@@ -17,7 +17,7 @@ const Documents = () => {
 
   const fetchDocuments = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/documents/`, {
+      const response = await axios.get(`http://dordod.com/api/documents/`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
         }
