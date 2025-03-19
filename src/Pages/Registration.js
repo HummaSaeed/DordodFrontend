@@ -74,7 +74,7 @@ const Registration = () => {
           last_name: formData.last_name,
           email: formData.email,
           password: formData.password,
-          password_confirm: formData.confirmPassword,
+          confirm_password: formData.confirmPassword,
         }),
       });
 
