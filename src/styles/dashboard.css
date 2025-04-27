@@ -1,3 +1,4 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
 .dashboard-container {
   display: flex;
   min-height: 100vh;
@@ -100,4 +101,18 @@
 
 .activity-content {
   margin-left: 1rem;
+}
+
+.quick-access-card {
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.quick-access-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.quick-access-card .card-body {
+  padding: 2rem;
 } 

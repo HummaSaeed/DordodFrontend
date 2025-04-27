@@ -42,12 +42,12 @@ const ProfessionalInformation = () => {
         technical_skills: 'technical-skills'
       };
 
-      const fetchPromises = Object.entries(endpoints).map(([key, endpoint]) => 
-        axios.get(`${API_BASE_URL}/${endpoint}/`, {
+      const fetchPromises = Object.entries(endpoints).map(([key, endpoint]) =>
+        axios.get(`http://dordod.com/api/${endpoint}/`, {
           headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` }
         })
-        .then(response => ({ key, data: response.data }))
-        .catch(error => ({ key, data: [] }))
+          .then(response => ({ key, data: response.data }))
+          .catch(error => ({ key, data: [] }))
       );
 
       const results = await Promise.all(fetchPromises);
@@ -73,7 +73,7 @@ const ProfessionalInformation = () => {
     const endpoint = getApiEndpoint(section);
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/${endpoint}/`, newItem, {
+      const response = await axios.post(`http://dordod.com/api/${endpoint}/`, newItem, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
           'Content-Type': 'application/json'
@@ -104,7 +104,7 @@ const ProfessionalInformation = () => {
     const endpoint = getApiEndpoint(section);
 
     try {
-      await axios.delete(`${API_BASE_URL}/${endpoint}/${itemId}/`, {
+      await axios.delete(`http://dordod.com/api/${endpoint}/${itemId}/`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
         }
@@ -136,7 +136,7 @@ const ProfessionalInformation = () => {
 
     try {
       const response = await axios.put(
-        `${API_BASE_URL}/${endpoint}/${item.id}/`,
+        `http://dordod.com/api/${endpoint}/${item.id}/`,
         updatedItem,
         {
           headers: {
@@ -247,7 +247,7 @@ const ProfessionalInformation = () => {
   const handleSaveNewItem = async (section) => {
     const endpoint = getApiEndpoint(section);
     try {
-      const response = await axios.post(`${API_BASE_URL}/${endpoint}/`, newItem, {
+      const response = await axios.post(`http://dordod.com/api/${endpoint}/`, newItem, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
           'Content-Type': 'application/json'
@@ -305,9 +305,9 @@ const ProfessionalInformation = () => {
                           type={field.type || 'text'}
                           value={item[field.name] || ''}
                           onChange={(e) => handleItemChange(
-                            section, 
-                            index, 
-                            field.name, 
+                            section,
+                            index,
+                            field.name,
                             field.type === 'checkbox' ? e.target.checked : e.target.value
                           )}
                           as={field.type === 'select' ? 'select' : field.as}
@@ -331,7 +331,7 @@ const ProfessionalInformation = () => {
             ))}
           </Accordion>
         )}
-        
+
         {showAddForm[section] ? (
           <Card className="mb-3">
             <Card.Body>
@@ -377,16 +377,21 @@ const ProfessionalInformation = () => {
             </Card.Body>
           </Card>
         ) : (
-        <Button
-            onClick={() => handleAddClick(section)}
-          className="mt-3"
-          style={{
-            backgroundImage: 'linear-gradient(45deg, #2C3E50, #28a745)',
-            border: 'none'
-          }}
-        >
-          Add {title}
-        </Button>
+          <div style={{ display: 'flex', justifyContent: "space-between", alignItems: "center" }}>
+            <p style={{ color: "lightgray", fontSize: "18px",alignItems:"center" }}>Add {title}</p>
+            <div style={{ display: 'flex', justifyContent: "flex-end" }}>
+              <Button
+                onClick={() => handleAddClick(section)}
+                className="mt-3"
+                style={{
+                  backgroundImage: 'linear-gradient(45deg, #2C3E50, #28a745)',
+                  border: 'none'
+                }}
+              >
+                +
+              </Button>
+            </div>
+          </div>
         )}
       </Card.Body>
     </Card>
@@ -395,7 +400,7 @@ const ProfessionalInformation = () => {
   return (
     <Container style={{ fontFamily: 'Poppins', paddingTop: '30px' }}>
       <Toast {...toast} onClose={() => setToast({ ...toast, show: false })} />
-      
+
       <h2 style={{ color: theme.colors.primary, marginBottom: '30px' }}>
         Professional Information
       </h2>
@@ -403,82 +408,92 @@ const ProfessionalInformation = () => {
       {loading ? (
         <div>Loading...</div>
       ) : (
-      <Form>
-        {renderSection('Work Experience', 'work_experiences', [
-          { name: 'organization_name', label: 'Organization Name' },
-          { name: 'organization_location', label: 'Location' },
-          { name: 'start_date', label: 'Start Date', type: 'date' },
-          { name: 'end_date', label: 'End Date', type: 'date' },
-          { name: 'is_current', label: 'Current Position', type: 'checkbox', width: 12 },
-          { name: 'description', label: 'Description', as: 'textarea', rows: 3, width: 12 }
-        ])}
+        <Form>
+          {renderSection('Work Experience', 'work_experiences', [
+            { name: 'organization_name', label: 'Organization Name' },
+            { name: 'organization_location', label: 'Location' },
+            { name: 'start_date', label: 'Start Date', type: 'date' },
+            { name: 'end_date', label: 'End Date', type: 'date' },
+            { name: 'is_current', label: 'Current Position', type: 'checkbox', width: 12 },
+            { name: 'description', label: 'Description', as: 'textarea', rows: 3, width: 12 }
+          ])}
 
-        {renderSection('Previous Experience', 'previous_experiences', [
-          { name: 'title', label: 'Title' },
-          { name: 'company_name', label: 'Company Name' },
-          { name: 'start_date', label: 'Start Date', type: 'date' },
-          { name: 'end_date', label: 'End Date', type: 'date' },
-          { name: 'job_responsibilities', label: 'Job Responsibilities', as: 'textarea', rows: 3, width: 12 }
-        ])}
+          {renderSection('Previous Experience', 'previous_experiences', [
+            { name: 'title', label: 'Title' },
+            { name: 'company_name', label: 'Company Name' },
+            { name: 'start_date', label: 'Start Date', type: 'date' },
+            { name: 'end_date', label: 'End Date', type: 'date' },
+            { name: 'job_responsibilities', label: 'Job Responsibilities', as: 'textarea', rows: 3, width: 12 }
+          ])}
 
-        {renderSection('Education', 'educations', [
-          { name: 'college_university', label: 'College/University' },
-          { name: 'degree', label: 'Degree' },
-          { name: 'area_of_study', label: 'Area of Study' },
-          { name: 'degree_completed', label: 'Degree Completed', type: 'checkbox' },
-          { name: 'date_completed', label: 'Date Completed', type: 'date' }
-        ])}
+          {renderSection('Education', 'educations', [
+            { name: 'college_university', label: 'College/University' },
+            { name: 'degree', label: 'Degree' },
+            { name: 'area_of_study', label: 'Area of Study' },
+            { name: 'degree_completed', label: 'Degree Completed', type: 'checkbox' },
+            { name: 'date_completed', label: 'Date Completed', type: 'date' }
+          ])}
 
-        {renderSection('Language Skills', 'language_skills', [
-          { name: 'language', label: 'Language' },
-          { name: 'speaking_proficiency', label: 'Speaking Proficiency', type: 'select', options: [
-            'Beginner', 'Intermediate', 'Advanced', 'Native'
-          ]},
-          { name: 'writing_proficiency', label: 'Writing Proficiency', type: 'select', options: [
-            'Beginner', 'Intermediate', 'Advanced', 'Native'
-          ]},
-          { name: 'reading_proficiency', label: 'Reading Proficiency', type: 'select', options: [
-            'Beginner', 'Intermediate', 'Advanced', 'Native'
-          ]}
-        ])}
+          {renderSection('Language Skills', 'language_skills', [
+            { name: 'language', label: 'Language' },
+            {
+              name: 'speaking_proficiency', label: 'Speaking Proficiency', type: 'select', options: [
+                'Beginner', 'Intermediate', 'Advanced', 'Native'
+              ]
+            },
+            {
+              name: 'writing_proficiency', label: 'Writing Proficiency', type: 'select', options: [
+                'Beginner', 'Intermediate', 'Advanced', 'Native'
+              ]
+            },
+            {
+              name: 'reading_proficiency', label: 'Reading Proficiency', type: 'select', options: [
+                'Beginner', 'Intermediate', 'Advanced', 'Native'
+              ]
+            }
+          ])}
 
-        {renderSection('Certificates', 'certificates', [
-          { name: 'certification_license', label: 'Certification/License' },
-          { name: 'institution', label: 'Institution' },
-          { name: 'effective_date', label: 'Effective Date', type: 'date' },
-          { name: 'expiration_date', label: 'Expiration Date', type: 'date' },
-          { name: 'description', label: 'Description', as: 'textarea', rows: 3, width: 12 },
-          { name: 'attachment', label: 'Attachment', type: 'file', width: 12 }
-        ])}
+          {renderSection('Certificates', 'certificates', [
+            { name: 'certification_license', label: 'Certification/License' },
+            { name: 'institution', label: 'Institution' },
+            { name: 'effective_date', label: 'Effective Date', type: 'date' },
+            { name: 'expiration_date', label: 'Expiration Date', type: 'date' },
+            { name: 'description', label: 'Description', as: 'textarea', rows: 3, width: 12 },
+            { name: 'attachment', label: 'Attachment', type: 'file', width: 12 }
+          ])}
 
-        {renderSection('Honors, Awards & Publications', 'honors_awards_publications', [
-          { name: 'honor_reward_publication', label: 'Honor/Award/Publication Title' },
-          { name: 'institution', label: 'Institution' },
-          { name: 'issue_date', label: 'Issue Date', type: 'date' },
-          { name: 'description', label: 'Description', as: 'textarea', rows: 3, width: 12 },
-          { name: 'attachment', label: 'Attachment', type: 'file', width: 12 }
-        ])}
+          {renderSection('Honors, Awards & Publications', 'honors_awards_publications', [
+            { name: 'honor_reward_publication', label: 'Honor/Award/Publication Title' },
+            { name: 'institution', label: 'Institution' },
+            { name: 'issue_date', label: 'Issue Date', type: 'date' },
+            { name: 'description', label: 'Description', as: 'textarea', rows: 3, width: 12 },
+            { name: 'attachment', label: 'Attachment', type: 'file', width: 12 }
+          ])}
 
-        {renderSection('Functional Skills', 'functional_skills', [
-          { name: 'skill', label: 'Skill Name' },
-          { name: 'proficiency', label: 'Proficiency Level', type: 'select', options: [
-            'Beginner',
-            'Intermediate',
-            'Advanced',
-            'Expert'
-          ]}
-        ])}
+          {renderSection('Functional Skills', 'functional_skills', [
+            { name: 'skill', label: 'Skill Name' },
+            {
+              name: 'proficiency', label: 'Proficiency Level', type: 'select', options: [
+                'Beginner',
+                'Intermediate',
+                'Advanced',
+                'Expert'
+              ]
+            }
+          ])}
 
-        {renderSection('Technical Skills', 'technical_skills', [
-          { name: 'skill', label: 'Skill Name' },
-          { name: 'proficiency', label: 'Proficiency Level', type: 'select', options: [
-            'Beginner',
-            'Intermediate',
-            'Advanced',
-            'Expert'
-          ]}
-        ])}
-      </Form>
+          {renderSection('Technical Skills', 'technical_skills', [
+            { name: 'skill', label: 'Skill Name' },
+            {
+              name: 'proficiency', label: 'Proficiency Level', type: 'select', options: [
+                'Beginner',
+                'Intermediate',
+                'Advanced',
+                'Expert'
+              ]
+            }
+          ])}
+        </Form>
       )}
     </Container>
   );

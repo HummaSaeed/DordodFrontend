@@ -57,7 +57,27 @@ const Registration = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const validatePassword = (password) => {
+    const hasEightChars = password.length >= 8;
+    const hasLetter = /[a-zA-Z]/.test(password);
+    const hasNumber = /\d/.test(password);
+    
+    if (!hasEightChars) {
+      return "Password must be at least 8 characters long";
+    }
+    if (!hasLetter || !hasNumber) {
+      return "Password must contain both letters and numbers";
+    }
+    return null;
+  };
+
   const handleRegister = async () => {
+    const passwordError = validatePassword(formData.password);
+    if (passwordError) {
+      setError(passwordError);
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match.");
       return;
@@ -202,6 +222,15 @@ const Registration = () => {
               isRequired={true}
               onChange={handleChange}
             />
+            <div style={{ 
+              fontSize: "12px", 
+              color: "#666", 
+              marginTop: "-10px", 
+              marginBottom: "10px",
+              fontFamily: "Poppins"
+            }}>
+              Password must be at least 8 characters long and contain both letters and numbers
+            </div>
             <InputField
               label="Confirm Password"
               name="confirmPassword"
@@ -212,6 +241,22 @@ const Registration = () => {
             />
             {error && <p style={{ color: "red" }}>{error}</p>}
             <SignUpButton label="REGISTER" onClick={handleRegister} />
+            <div style={{ textAlign: "left", marginLeft:3 }}>
+              <span style={{fontFamily:"Poppins" }}>If you already have an account </span>
+              <button
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: "#28a745",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  textDecoration: "underline",
+                }}
+                onClick={() => navigate("/")}
+                  >
+                    SignIn
+              </button>
+              </div>
           </Modal.Body>
         </Modal>
       </div>

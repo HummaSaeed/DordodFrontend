@@ -36,6 +36,7 @@ const Goals = () => {
   const [showInputFields, setShowInputFields] = useState(false);
   const [toast, setToast] = useState({ show: false, message: '', variant: 'success' });
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const [newGoal, setNewGoal] = useState({
     name: "",
@@ -53,9 +54,22 @@ const Goals = () => {
   }, []);
 
   const fetchGoals = async () => {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      setError('Authentication token not found');
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await axios.get(`http://dordod.com/api/main-goals/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` }
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        params: {
+          user_specific: true  // Add this query parameter to get user-specific goals
+        }
       });
 
       const formattedGoals = response.data.map((goal) => ({
@@ -72,11 +86,21 @@ const Goals = () => {
 
       setGoals(formattedGoals);
     } catch (error) {
-      setToast({
-        show: true,
-        message: handleApiError(error),
-        variant: 'danger'
-      });
+      if (error.response?.status === 401) {
+        setToast({
+          show: true,
+          message: 'Session expired. Please login again.',
+          variant: 'danger'
+        });
+        // Optionally redirect to login
+        // navigate('/');
+      } else {
+        setToast({
+          show: true,
+          message: handleApiError(error),
+          variant: 'danger'
+        });
+      }
     } finally {
       setLoading(false);
     }
@@ -109,10 +133,20 @@ const Goals = () => {
   };
 
   const handleSaveGoal = async () => {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      setToast({
+        show: true,
+        message: 'Authentication token not found',
+        variant: 'danger'
+      });
+      return;
+    }
+
     try {
       const response = await axios.post(`http://dordod.com/api/main-goals/`, newGoal, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         }
       });
@@ -148,18 +182,39 @@ const Goals = () => {
         variant: 'success'
       });
     } catch (error) {
-      setToast({
-        show: true,
-        message: handleApiError(error),
-        variant: 'danger'
-      });
+      if (error.response?.status === 401) {
+        setToast({
+          show: true,
+          message: 'Session expired. Please login again.',
+          variant: 'danger'
+        });
+      } else {
+        setToast({
+          show: true,
+          message: handleApiError(error),
+          variant: 'danger'
+        });
+      }
     }
   };
 
   const handleDeleteGoal = async () => {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      setToast({
+        show: true,
+        message: 'Authentication token not found',
+        variant: 'danger'
+      });
+      return;
+    }
+
     try {
-      await axios.delete(`http://localhost:8000/api/main-goals/${selectedGoal.id}/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` }
+      await axios.delete(`http://dordod.com/api/main-goals/${selectedGoal.id}/`, {
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
       });
 
       setGoals(goals.filter((goal) => goal.id !== selectedGoal.id));
@@ -171,11 +226,19 @@ const Goals = () => {
         variant: 'success'
       });
     } catch (error) {
-      setToast({
-        show: true,
-        message: handleApiError(error),
-        variant: 'danger'
-      });
+      if (error.response?.status === 401) {
+        setToast({
+          show: true,
+          message: 'Session expired. Please login again.',
+          variant: 'danger'
+        });
+      } else {
+        setToast({
+          show: true,
+          message: handleApiError(error),
+          variant: 'danger'
+        });
+      }
     }
   };
 

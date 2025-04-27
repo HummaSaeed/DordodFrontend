@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Row, Col } from "react-bootstrap";
 import InputField from "../components/InputField";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import logo from "../assets/logo.jpeg";
 import bgImage from "../assets/bg-image.jpg";
+import { SOCIAL_AUTH_CONFIG } from '../config/socialAuth';
 
 const SignInButton = ({ label, onClick, icon, disabled }) => {
   return (
@@ -71,6 +72,42 @@ const SignIn = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleGoogleLogin = () => {
+    const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${
+      SOCIAL_AUTH_CONFIG.GOOGLE.CLIENT_ID
+    }&redirect_uri=${encodeURIComponent(
+      SOCIAL_AUTH_CONFIG.GOOGLE.REDIRECT_URI
+    )}&response_type=code&scope=${encodeURIComponent(
+      SOCIAL_AUTH_CONFIG.GOOGLE.SCOPE
+    )}`;
+    
+    window.location.href = googleAuthUrl;
+  };
+
+  const handleFacebookLogin = () => {
+    const facebookAuthUrl = `https://www.facebook.com/v12.0/dialog/oauth?client_id=${
+      SOCIAL_AUTH_CONFIG.FACEBOOK.APP_ID
+    }&redirect_uri=${encodeURIComponent(
+      SOCIAL_AUTH_CONFIG.FACEBOOK.REDIRECT_URI
+    )}&scope=${encodeURIComponent(
+      SOCIAL_AUTH_CONFIG.FACEBOOK.SCOPE
+    )}`;
+
+    window.location.href = facebookAuthUrl;
+  };
+
+  const handleLinkedInLogin = () => {
+    const linkedInAuthUrl = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${
+      SOCIAL_AUTH_CONFIG.LINKEDIN.CLIENT_ID
+    }&redirect_uri=${encodeURIComponent(
+      SOCIAL_AUTH_CONFIG.LINKEDIN.REDIRECT_URI
+    )}&scope=${encodeURIComponent(
+      SOCIAL_AUTH_CONFIG.LINKEDIN.SCOPE
+    )}`;
+
+    window.location.href = linkedInAuthUrl;
   };
 
   return (
@@ -189,21 +226,21 @@ const SignIn = () => {
                 <SignInButton
                   label="Google"
                   icon={faGoogle}
-                  onClick={() => console.log("Google Sign-In")}
+                  onClick={handleGoogleLogin}
                 />
               </Col>
               <Col>
                 <SignInButton
                   label="Facebook"
                   icon={faFacebook}
-                  onClick={() => console.log("Facebook Sign-In")}
+                  onClick={handleFacebookLogin}
                 />
               </Col>
               <Col>
                 <SignInButton
                   label="LinkedIn"
                   icon={faLinkedin}
-                  onClick={() => console.log("LinkedIn Sign-In")}
+                  onClick={handleLinkedInLogin}
                 />
               </Col>
             </Row>

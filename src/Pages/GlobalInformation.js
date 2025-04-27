@@ -32,7 +32,7 @@ const GlobalInformation = () => {
 
   const fetchGlobalInfo = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/global-info/`, {
+      const response = await axios.get(`http://dordod.com/api/global-info/`, {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` }
       });
       

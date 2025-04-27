@@ -146,7 +146,7 @@ const SWOTAnalysis = () => {
         }
       });
 
-      // Update local state
+      // Update local state without re-fetching
       setSWOTData(prev => ({
         ...prev,
         [section]: [...prev[section], newItems[section]]
@@ -158,7 +158,7 @@ const SWOTAnalysis = () => {
         [section]: ''
       }));
 
-      fetchSWOTData();
+      // Remove the fetchSWOTData() call
     } catch (error) {
       console.error(`Error adding ${section} item:`, error);
     } finally {
@@ -189,67 +189,86 @@ const SWOTAnalysis = () => {
     }
   };
 
-  const SWOTCard = ({ title, name, color }) => (
-    <Col md={6} className="mb-4">
-      <Card style={{ boxShadow: theme.shadows.sm, height: '100%' }}>
-        <Card.Header
-          style={{
-            backgroundImage: `linear-gradient(45deg, #2C3E50, ${color})`,
-            color: 'white',
-            padding: '15px'
-          }}
-        >
-          <h5 className="mb-0">{title}</h5>
-        </Card.Header>
-        <Card.Body>
-          <div className="mb-3">
-            <div className="d-flex">
-              <Form.Control
-                type="text"
-                value={newItems[name]}
-                onChange={(e) => handleNewItemChange(e, name)}
-                placeholder={`Add new ${title.toLowerCase()}`}
-                style={{ 
-                  borderRadius: '4px 0 0 4px',
-                  fontFamily: 'Poppins'
-                }}
-              />
-              <Button
-                onClick={() => handleAddItem(name)}
-                disabled={loading[name]}
-                style={{
-                  backgroundImage: `linear-gradient(45deg, #2C3E50, ${color})`,
-                  border: 'none',
-                  borderRadius: '0 4px 4px 0'
-                }}
-              >
-                <FaPlus />
-              </Button>
-            </div>
-          </div>
+  const SWOTCard = ({ title, name, color }) => {
+    const inputRef = React.useRef(null);
 
-          <ListGroup>
-            {swotData[name].map((item, index) => (
-              <ListGroup.Item
-                key={index}
-                className="d-flex justify-content-between align-items-center"
-                style={{ fontFamily: 'Poppins' }}
-              >
-                <span>{item}</span>
+    const handleAdd = () => {
+      handleAddItem(name);
+      // Focus back on the input after adding
+      inputRef.current?.focus();
+    };
+
+    return (
+      <Col md={6} className="mb-4">
+        <Card style={{ boxShadow: theme.shadows.sm, height: '100%' }}>
+          <Card.Header
+            style={{
+              backgroundImage: `linear-gradient(45deg, #2C3E50, ${color})`,
+              color: 'white',
+              padding: '15px'
+            }}
+          >
+            <h5 className="mb-0">{title}</h5>
+          </Card.Header>
+          <Card.Body>
+            <div className="mb-3">
+              <div className="d-flex">
+                <Form.Control
+                  ref={inputRef}
+                  type="text"
+                  value={newItems[name]}
+                  onChange={(e) => handleNewItemChange(e, name)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      handleAdd();
+                    }
+                  }}
+                  placeholder={`Add new ${title.toLowerCase()}`}
+                  style={{ 
+                    borderRadius: '4px 0 0 4px',
+                    fontFamily: 'Poppins',
+                    width: '100%'
+                  }}
+                  autoComplete="off"
+                />
                 <Button
-                  variant="link"
-                  className="text-danger p-0"
-                  onClick={() => handleDeleteItem(name, index)}
+                  onClick={handleAdd}
+                  disabled={loading[name]}
+                  style={{
+                    backgroundImage: `linear-gradient(45deg, #2C3E50, ${color})`,
+                    border: 'none',
+                    borderRadius: '0 4px 4px 0'
+                  }}
                 >
-                  <FaTrash />
+                  <FaPlus />
                 </Button>
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
-        </Card.Body>
-      </Card>
-    </Col>
-  );
+              </div>
+            </div>
+
+            <ListGroup>
+              {swotData[name].map((item, index) => (
+                <ListGroup.Item
+                  key={index}
+                  className="d-flex justify-content-between align-items-center"
+                  style={{ fontFamily: 'Poppins' }}
+                >
+                  <span>{item}</span>
+                  <Button
+                    variant="link"
+                    className="text-danger p-0"
+                    onClick={() => handleDeleteItem(name, index)}
+                  >
+                    <FaTrash />
+                  </Button>
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+          </Card.Body>
+        </Card>
+      </Col>
+    );
+  };
 
   return (
     <Container style={{ fontFamily: 'Poppins', paddingTop: '30px' }}>

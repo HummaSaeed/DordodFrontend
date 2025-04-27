@@ -30,10 +30,10 @@ const CustomNavbar = ({ toggleSidebar, userName }) => {
         <Image src={logo} height={70} alt="Logo" />
       </Navbar.Brand>
       <Nav className="ms-auto d-flex align-items-center">
-        <span className="me-3 fw-bold" style={{ color: theme.colors.primary }}>
+        {/* <span className="me-3 fw-bold" style={{ color: theme.colors.primary }}>
           {userName || 'User'}
-        </span>
-        <div className="position-relative">
+        </span> */}
+        <div className="position-relative" style={{display:"flex",flexDirection:"row"}}>
           <Image 
             src={profile} 
             roundedCircle 

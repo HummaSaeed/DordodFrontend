@@ -42,7 +42,7 @@ const Documents = () => {
 
     setLoading(true);
     try {
-      await axios.post(`${API_BASE_URL}/documents/`, formData, {
+      await axios.post(`http://dordod.com/api/documents/`, formData, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
           'Content-Type': 'multipart/form-data'
